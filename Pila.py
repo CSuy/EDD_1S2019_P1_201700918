@@ -33,13 +33,3 @@ class Pila():
             for j in range(self.tam):
                 print("El valor X: ",temporal.valorX, " y el valor Y: ", temporal.valorY)
                 temporal=temporal.siguiente
-
-lista = Pila()
-lista.meter(2,2)
-lista.meter(2,3)
-lista.meter(2,4)
-lista.meter(2,5)
-lista.meter(2,6)
-lista.mostrar()
-lista.sacar()
-lista.mostrar()

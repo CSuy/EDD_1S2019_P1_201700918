@@ -43,13 +43,3 @@ class ListaDoble():
                 print("El valor X: ",temporal.valorX, " y el valor Y: ", temporal.valorY)
                 temporal=temporal.siguiente
         
-        
-lista = ListaDoble()
-lista.insertar(2,3)
-lista.insertar(2,4)
-lista.insertar(2,5)
-lista.insertar(6,7)
-lista.insertar(9,34)
-lista.mostrar()
-lista.quitar()
-lista.mostrar()

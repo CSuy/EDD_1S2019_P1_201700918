@@ -11,8 +11,15 @@ class Nodo_2(): #ESTE NODO SERVIRA PARA LA PILA
         self.valorX=valorX
         self.valorY=valorY
 
-#class Nodo_3(): #ESTE NODO SERVIRA PARA LA COLA 
+class Nodo_3(): #ESTE NODO SERVIRA PARA LA COLA 
+    def __init__(self,nombre, puntuacion):
+        self.siguiente=None
+        self.nombre=nombre
+        self.puntuacion=puntuacion
 
 
-
-#class Nodo_4(): # ESTE NODO SERVIRA PARA LA LISTA CIRCULAR DOBLEMENTE ENLAZADA
+class Nodo_4(): # ESTE NODO SERVIRA PARA LA LISTA CIRCULAR DOBLEMENTE ENLAZADA
+    def __init__(self,jugador):
+        self.siguiente=None
+        self.anterior=None
+        self.jugador=jugador
