@@ -50,3 +50,4 @@ class Pila():
         a.write("}")
         a.close()
         os.system("dot -Tjpg Pila.dot -o"+archivo)
+        os.system(archivo)

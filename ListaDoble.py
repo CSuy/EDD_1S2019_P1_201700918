@@ -67,4 +67,5 @@ class ListaDoble():
             a.write("}")
             a.close()
             os.system("dot -Tjpg ListaDobleEnlazada.dot -o"+archivo)
+            os.system(archivo)
             

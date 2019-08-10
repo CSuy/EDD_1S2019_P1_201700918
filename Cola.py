@@ -58,3 +58,4 @@ class Cola():
             a.write("}")
             a.close()
             os.system("dot -Tjpg Cola.dot -o"+archivo)
+            os.system(archivo)

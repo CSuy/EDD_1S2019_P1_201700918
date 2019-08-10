@@ -70,3 +70,4 @@ class ListaCircular():
         a.write("}")
         a.close()
         os.system("dot -Tjpg ListaDobleCircular.dot -o"+archivo)
+        os.system(archivo)
