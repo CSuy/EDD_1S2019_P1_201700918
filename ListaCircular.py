@@ -1,4 +1,5 @@
 from nodo import Nodo_4
+import os
 
 class ListaCircular():
     def __init__(self):
@@ -46,3 +47,26 @@ class ListaCircular():
             for j in range(self.tam):
                 print("El jugador es: ", temporal.jugador)
                 temporal=temporal.anterior
+
+    def graficar(self):
+        archivo="ListaCircular.jpg"
+        a=open("ListaDobleCircular.dot","w")
+        a.write("digraph listaCircular{\n")
+        a.write("rankdir=LR;\n")
+        a.write("node[shape = record];\n")
+        temporal=self.primero
+        con=0
+        for g in range(self.tam):
+            a.write("nodo"+str(g)+" [label="+chr(34)+"{|"+str(temporal.jugador)+"|}"+chr(34)+"];\n")
+            temporal=temporal.siguiente
+            aux=g
+        for h in range(self.tam-1):
+            c=h+1
+            a.write("nodo"+str(h)+"->nodo"+str(c)+";\n")
+            a.write("nodo"+str(c)+"->nodo"+str(h)+";\n")
+            con=c
+        a.write("nodo"+str(con)+"->nodo0;\n")
+        a.write("nodo0->nodo"+str(con)+";\n")
+        a.write("}")
+        a.close()
+        os.system("dot -Tjpg ListaDobleCircular.dot -o"+archivo)

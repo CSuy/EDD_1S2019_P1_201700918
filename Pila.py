@@ -1,4 +1,5 @@
 from nodo import Nodo_2
+import os
 
 class Pila():
     def __init__(self):
@@ -33,3 +34,19 @@ class Pila():
             for j in range(self.tam):
                 print("El valor X: ",temporal.valorX, " y el valor Y: ", temporal.valorY)
                 temporal=temporal.siguiente
+    
+    def graficar(self):
+        archivo="pila.jpg"
+        a=open("Pila.dot","w")
+        a.write("digraph listaCircular{\n")
+        a.write("rankdir=LR;\n")
+        a.write("node[shape = record];\n")
+        temporal=self.primero
+        a.write("nodo0 [label="+chr(34))
+        for h in range(self.tam):
+            a.write("|"+str(temporal.valorY))
+            temporal=temporal.siguiente
+        a.write(chr(34)+"];")
+        a.write("}")
+        a.close()
+        os.system("dot -Tjpg Pila.dot -o"+archivo)
