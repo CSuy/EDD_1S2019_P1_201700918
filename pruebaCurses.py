@@ -24,15 +24,21 @@ while key != 27:                #run program while [ESC] key is not pressed
         key = keystroke         #key direction changes
 
     window.addch(pos_y,pos_x,' ')       #erase last dot
-    if key == KEY_RIGHT:                #right direction
-        pos_x = pos_x + 1               #pos_x increase
-    elif key == KEY_LEFT:               #left direction
-        pos_x = pos_x - 1               #pos_x decrease
-    elif key == KEY_UP:                 #up direction
-        pos_y = pos_y - 1               #pos_y decrease
-    elif key == KEY_DOWN:               #down direction
-        pos_y = pos_y + 1               #pos_y increase
-    window.addch(pos_y,pos_x,'*')       #draw new dot
-
-
+    if key == KEY_RIGHT: 
+        pos_x = pos_x + 1
+        if pos_x>width-2:
+            pos_x=1
+    elif key == KEY_LEFT:
+        pos_x = pos_x - 1
+        if pos_x<1:
+            pos_x=width-2
+    elif key == KEY_UP:
+        pos_y = pos_y - 1
+        if pos_y<1:
+            pos_y=height-2
+    elif key == KEY_DOWN:
+        pos_y = pos_y + 1
+        if pos_y>height-2:
+            pos_y=1
+    window.addch(pos_y,pos_x,'*')
 curses.endwin() #return terminal to previous state

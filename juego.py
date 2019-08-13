@@ -2,96 +2,71 @@ import curses
 from curses import KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN
 from random import randint
 
-height = 30
-width = 55
-pos_y = 0
-pos_x = 0
-class serpiente():
-    def __init__(self, pos_x1, pos_y1,window): #iniciamos el juego con un score
-        self.puntuacion=0
-        self.cuerpo=[] #donde se dibujara el cuerpo
-        self.window=window
-        for i in range(2,0,-1): #tam_snake,donde termina,decrece en -1
-            self.cuerpo.append(cuerpo(pos_x1-i,pos_y1))
-        self.cuerpo.append(cuerpo(pos_x1,pos_y1))
-        self.despues_cabeza=(pos_x1,pos_y1)
+#este es el menu que subio de ejemplo el aux Dennis a github
+import curses #import the curses library
+import time
+from curses import KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN #import special KEYS from the curses library
 
-    #definimos un formato para la puntuacion -> toString()
-    def punteo(self):
-        return 'Score : {}'.format(self.puntuacion)
-        
-    def agregar(self,cuerpo):
-        self.cuerpo.extend(cuerpo)
-    
-    def comer(self,comida):
-        comida.reinicio_bocado()
-        cuerpo=cuerpo(self.despues_cabeza[0],self.despues_cabeza[1])
-        self.cuerpo.insert(-1,cuerpo)
-        self.puntuacion +=1
+def paint_menu(win):
+    paint_title(win,' MAIN MENU ')          #paint title
+    win.addstr(7,21, '1. Play')             #paint option 1
+    win.addstr(8,21, '2. Scoreboard')       #paint option 2
+    win.addstr(9,21, '3. User Selection')   #paint option 3
+    win.addstr(10,21, '4. Reports')         #paint option 4
+    win.addstr(11,21, '5. Bulk Loading')    #paint option 5
+    win.addstr(12,21, '6. Exit')            #paint option 6
+    win.timeout(-1)                         #wait for an input thru the getch() function
 
-    def GameOver(self):
-        return any([cuerpo.coordenadas1==self.cabeza.coordenadas1
-                        for cuerpo in self.cuerpo[:-1]])
+def paint_title(win,var):
+    win.clear()                         #it's important to clear the screen because of new functionality everytime we call this function
+    win.border(0)                       #after clearing the screen we need to repaint the border to keep track of our working area
+    x_start = round((60-len(var))/2)    #center the new title to be painted
+    win.addstr(0,x_start,var)           #paint the title on the screen
 
-    def animacion(self):
-        despues_cuerpo=self.cuerpo.pop(0)
-        despues_cuerpo.coorX=self.cuerpo[-1].coorX
-        despues_cuerpo.coorY=self.cuerpo[-1].coorY
-        self.cuerpo.insert(-1,despues_cuerpo)
-        self.despues_cabeza=(self.cabeza.coorX,self.cabeza.coorY)
-
-    def render(self):
-        for cuerpo in self.cuerpo:
-            self.window.addstr(cuerpo.coorY, cuerpo.coorX, cuerpo.signo)
-
-    def Cabeza(self):
-        return self.cuerpo[-1]
-
-class cuerpo():
-    def __init__(self,coorX,coorY):
-        self.coorX=coorX
-        self.coorY=coorY
-        self.signo="#"
-
-    def coordenadas1(self):
-        return self.coorX,self.coorY
-    def coordenadas(self):
-        return '({},{})'.format(self.coorX,self.coorY)
-
-class comida():
-    def __init__(self):
-        self.posx=randint(1,53)
-        self.posy=randint(1,28)
-
-    def bocado(self):
-        tipoBocado=randint(1,5)
-        return tipoBocado
-
-    def reinicio_bocado(self):
-        self.posx=randint(1,53)
-        self.posy=randint(1,28)
+def wait_esc(win):
+    key = window.getch()
+    while key!=27:
+        key = window.getch()
 
 
+stdscr = curses.initscr() #initialize console
+window = curses.newwin(20,60,0,0) #create a new curses window
+window.keypad(True)     #enable Keypad mode
+curses.noecho()         #prevent input from displaying in the screen
+curses.curs_set(0)      #cursor invisible (0)
+paint_menu(window)      #paint menu
 
-stdscr = curses.initscr()
-window = curses.newwin(height,width,pos_y,pos_x)
-window.keypad(True)
-curses.noecho()
-curses.curs_set(0)
-window.border(0)
-window.nodelay(True) 
-window.addstr(0,40,"Snake")
-snake=serpiente(4,2,window)
-food = comida()
-boca=food.bocado()
-window.addstr(0,5,snake.punteo())
-if boca==3:
-    window.addstr(food.posy,food.posx,"*")
-else:
-    window.addstr(food.posy,food.posx,"+")
-key=KEY_RIGHT
-while key!=27:
-    window.timeout(100)
-    keystroke = window.getch()
-    snake.render()
-curses.endwin()
+keystroke = -1
+while(keystroke==-1):
+    keystroke = window.getch()  #get current key being pressed
+    if(keystroke==49): #1
+        paint_title(window, ' PLAY ')
+        wait_esc(window)
+        paint_menu(window)
+        keystroke=-1
+    elif(keystroke==50):
+        paint_title(window, ' SCOREBOARD ')
+        wait_esc(window)
+        paint_menu(window)
+        keystroke=-1
+    elif(keystroke==51):
+        paint_title(window, ' USER SELECTION ')
+        wait_esc(window)
+        paint_menu(window)
+        keystroke=-1
+    elif(keystroke==52):
+        paint_title(window, ' REPORTS ')
+        wait_esc(window)
+        paint_menu(window)
+        keystroke=-1
+    elif(keystroke==53):
+        paint_title(window,' BULK LOADING ')
+        wait_esc(window)
+        paint_menu(window)
+        keystroke=-1
+    elif(keystroke==54):
+        pass
+    else:
+        keystroke=-1
+
+curses.endwin() #return terminal to previous state
