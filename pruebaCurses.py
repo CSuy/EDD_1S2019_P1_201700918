@@ -17,8 +17,6 @@ key = KEY_RIGHT         #key defaulted to KEY_RIGHT
 pos_x = 5               #initial x position
 pos_y = 5               #initial y position
 window.addch(pos_y,pos_x,'*')   #print initial dot
-window.addch(pos_y,pos_x-1,'*') 
-window.addch(pos_y,pos_x-2,'*') 
 while key != 27:                #run program while [ESC] key is not pressed
     window.timeout(100)         #delay of 100 milliseconds
     keystroke = window.getch()  #get current key being pressed
@@ -26,8 +24,6 @@ while key != 27:                #run program while [ESC] key is not pressed
         key = keystroke         #key direction changes
 
     window.addch(pos_y,pos_x,' ')       #erase last dot
-    window.addch(pos_y,pos_x-1,' ') 
-    window.addch(pos_y,pos_x-2,' ') 
     if key == KEY_RIGHT:                #right direction
         pos_x = pos_x + 1               #pos_x increase
     elif key == KEY_LEFT:               #left direction
@@ -37,8 +33,6 @@ while key != 27:                #run program while [ESC] key is not pressed
     elif key == KEY_DOWN:               #down direction
         pos_y = pos_y + 1               #pos_y increase
     window.addch(pos_y,pos_x,'*')       #draw new dot
-    window.addch(pos_y,pos_x-1,'*') 
-    window.addch(pos_y,pos_x-2,'*') 
 
 
 curses.endwin() #return terminal to previous state
