@@ -35,7 +35,7 @@ class ListaCircular():
             temporal=self.primero
             print("-----Impresion de los siguientes-----")
             for j in range(self.tam):
-                print("El jugador es: ", temporal.jugador)
+                print("<---", temporal.jugador,"--->")
                 temporal=temporal.siguiente
                 
     def mostrar_anteriores(self):
