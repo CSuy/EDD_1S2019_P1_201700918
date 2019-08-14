@@ -26,13 +26,15 @@ class ListaDoble():
             self.tam +=1
     
     def quitar(self):
-        temporal=self.primero
-        x=1
-        while (temporal.siguiente!=None and x<self.tam):
-            temporal=temporal.siguiente
-            x +=1
-        temporal.siguiente=None
-        self.tam=self.tam-1
+        #temporal=self.primero
+        #x=1
+        #while (temporal.siguiente!=None and x<self.tam):
+            #temporal=temporal.siguiente
+            #x +=1
+        #temporal.siguiente=None
+        #self.tam=self.tam-1
+        self.primero=None
+        self.tam=0
     
     def mostrar(self):
         if self.vacia():
@@ -55,7 +57,7 @@ class ListaDoble():
             temporal=self.primero
             con=0
             for g in range(self.tam):
-                a.write("nodo"+str(g)+" [label="+chr(34)+"{|"+str(temporal.valorY)+"|}"+chr(34)+"];\n")
+                a.write("nodo"+str(g)+" [label="+chr(34)+"{|("+str(temporal.valorX)+","+str(temporal.valorY)+")|}"+chr(34)+"];\n")
                 temporal=temporal.siguiente
             a.write("nodonull1->nodo0 [dir=back];\n")
             for h in range(self.tam-1):

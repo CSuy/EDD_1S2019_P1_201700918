@@ -44,7 +44,7 @@ class Pila():
         temporal=self.primero
         a.write("nodo0 [label="+chr(34))
         for h in range(self.tam):
-            a.write("|"+str(temporal.valorY))
+            a.write("|("+str(temporal.valorX)+","+str(temporal.valorY)+")")
             temporal=temporal.siguiente
         a.write(chr(34)+"];")
         a.write("}")
