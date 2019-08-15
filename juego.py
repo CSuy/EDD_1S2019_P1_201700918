@@ -2,6 +2,7 @@ import curses
 from curses import KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN
 from random import randint
 from ListaCircular import ListaCircular
+from Cola import Cola
 import csv
 
 #este es el menu que subio de ejemplo el aux Dennis a github
@@ -9,7 +10,7 @@ import curses #import the curses library
 import time
 from curses import KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN #import special KEYS from the curses library
 listac=ListaCircular()
-
+cola=Cola()
 def paint_menu(win):
     paint_title(win,' MAIN MENU ')          #paint title
     win.addstr(7,21, '1. Play')             #paint option 1

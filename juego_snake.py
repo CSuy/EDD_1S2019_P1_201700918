@@ -4,6 +4,7 @@ from random import randint
 from ListaDoble import ListaDoble
 from Pila import Pila
 from ListaCircular import ListaCircular
+from Cola import Cola
 import csv
 
 height = 30
@@ -13,7 +14,23 @@ pos_x = 0
 lista = ListaDoble()
 pila = Pila()
 listac=ListaCircular()
+cola=Cola()
 usuario=""
+class Player(object):
+    def __init__(self,wind):
+        self.window=wind
+        self.player=[]
+    def asignacion(self,user):
+        if self.player[0] is None:
+            self.player.append(user)
+        else:
+            self.player.pop(0)
+            self.player.append(user)
+    @property
+    def jugador(self):
+        return "Jugador: {}".format(self.player[0])
+
+
 class Serpiente(object):
     Direccion_ = { #se verifica que solo estas direcciones puede tomar dentro de la ventana
         KEY_UP: KEY_DOWN, KEY_DOWN: KEY_UP,
@@ -36,7 +53,7 @@ class Serpiente(object):
         }
     @property
     def punteo(self):
-        return 'Score : {}'.format(self.puntuacion)+ " Jugador: "+usuario
+        return 'Score : {}'.format(self.puntuacion)
     def agregar(self,cuerpo):
         self.lista.extend(cuerpo)
     def comer(self,comida,signo):
@@ -51,6 +68,12 @@ class Serpiente(object):
             pila.sacar()
         comida.reinicio_bocado()
         
+    def reinicio(self):
+        for i in range(len(self.lista),3,-1):
+            cuerpo=Cuerpo(self.despues_cabeza[0],self.despues_cabeza[1])
+            self.lista.pop()
+        for i in range(pila.tam):
+            pila.sacar()
 
     @property
     def gameOver(self):
@@ -123,7 +146,7 @@ class Comida(object):
         self.window=window
         self.bocado1=""
     def bocado(self,tipoBocado):
-        if tipoBocado<7:
+        if tipoBocado<14:
             self.window.addstr(self.posy,self.posx,"+")
             self.bocado1="+"
         else:
@@ -144,7 +167,7 @@ def menu_principal(win):
     win.addstr(17,18,"5.Carga Masiva")
     win.timeout(-1)
 
-def juego(windows):      
+def juego(windows,user):      
     #if __name__ == '__main__':
         stdscr1 = curses.initscr() 
         window=windows
@@ -156,14 +179,17 @@ def juego(windows):
         food=Comida(window)
         prueba=randint(0,10)
         key=KEY_DOWN
-        player=usuario
+        nivel=1
+        next_level=5
+        time=100
         while key!=27:
             window.clear()
             window.border(0)
             snake.actualizacion()
             food.bocado(prueba)
             window.addstr(0, 5, snake.punteo)
-            window.addstr(0,30,"Jugador: ")
+            window.addstr(0,25,"Jugador: "+user)
+            window.addstr(1,5,"Nivel: "+str(nivel))
             event = window.getch()
             #if event == 27:
                 #ciclo==False
@@ -176,7 +202,13 @@ def juego(windows):
                 snake.comer(food,food.bocado1)
                 if food.bocado1=="+":
                     snake.agregarPila(food.posx,food.posy)
-                prueba=randint(0,10)
+                prueba=randint(0,15)
+            if snake.puntuacion==next_level:
+                snake.reinicio()
+                nivel +=1
+                next_level=next_level+5
+                time=time-20
+                window.timeout(time)
             if event==49:
                 window.timeout(-1)
                 snake.agregarLista()
@@ -226,58 +258,6 @@ def carga(windo):
             archivo=archivo+key1
         windo.refresh()
         
-def jugador(windo):
-    windo.clear()
-    windo.refresh()
-    windo.border(0)
-    curses.noecho()
-    windo.addstr(0,15,"Modulo de Jugadores")
-    pos=1
-    while True:
-        windo.clear()
-        windo.border(0)
-        windo.addstr(0,15,"Modulo de Jugadores")
-        if pos==1:
-            temporal=listac.primero
-            windo.addstr(15,25-len(temporal.jugador),temporal.jugador+"-->")
-            usuario=temporal.jugador
-        elif pos==listac.tam:
-            temporal=listac.primero
-            for i in range(listac.tam-1):
-                temporal=temporal.siguiente
-            window.addstr(15,25-len(temporal.jugador),"<--"+temporal.jugador)
-            usuario=temporal.jugador
-        else:
-            temporal=listac.primero
-            for i in range(pos-1):
-                temporal=temporal.siguiente
-            window.addstr(15,28-len(temporal.jugador),"<--"+temporal.jugador+"-->")
-            usuario=temporal.jugador
-        key=windo.getch()
-        if listac.vacia():
-            windo.addstr(1,2,"No hay jugadores en la lista")
-        else:
-            if key==curses.KEY_RIGHT:
-                pos +=1
-            elif key == curses.KEY_LEFT:
-                pos -=1
-            elif key==27:
-                break
-            elif key == 10:
-                windo.clear()
-                windo.refresh()
-                windo.border(0)
-                curses.noecho()
-                windo.addstr(0,15,"Modulo de Jugadores")
-                windo.addstr(15,15,"Se eligio al Jugador: "+usuario)
-                break
-            if pos<0:
-                pos=1
-            if pos>listac.tam:
-                pos=listac.tam
-        windo.refresh()
-
-
 def wait_esc(win):
     key = win.getch()
     while key!=27:
@@ -285,15 +265,17 @@ def wait_esc(win):
 
 stdscr = curses.initscr() 
 window = curses.newwin(height,width,0,0)
+windo=window
 window.keypad(True)
 curses.noecho()
 window.border(0)
 keystroke = -1
 menu_principal(window)
+play=""
 while(keystroke==-1):
     keystroke = window.getch()  #get current key being pressed
     if(keystroke==49): #1
-        juego(window)
+        juego(window,play)
         wait_esc(window)
         window.clear()
         menu_principal(window)
@@ -304,8 +286,58 @@ while(keystroke==-1):
         paint_menu(window)
         keystroke=-1
     elif(keystroke==51):
-        listac.graficar()
-        jugador(window)
+        #jugador(window)
+        windo.clear()
+        windo.refresh()
+        windo.border(0)
+        curses.noecho()
+        windo.addstr(0,15,"Modulo de Jugadores")
+        pos=1
+        usuario1=""
+        while True:
+            windo.clear()
+            windo.border(0)
+            windo.addstr(0,15,"Modulo de Jugadores")
+            if pos==1:
+               temporal=listac.primero
+               windo.addstr(15,25-len(temporal.jugador),temporal.jugador+"-->")
+               usuario1=temporal.jugador
+            elif pos==listac.tam:
+                temporal=listac.primero
+                for i in range(listac.tam-1):
+                    temporal=temporal.siguiente
+                window.addstr(15,25-len(temporal.jugador),"<--"+temporal.jugador)
+                usuario1=temporal.jugador
+            else:
+                temporal=listac.primero
+                for i in range(pos-1):
+                    temporal=temporal.siguiente
+                window.addstr(15,28-len(temporal.jugador),"<--"+temporal.jugador+"-->")
+                usuario1=temporal.jugador
+            key=windo.getch()
+            if listac.vacia():
+                windo.addstr(1,2,"No hay jugadores en la lista")
+            else:
+                if key==curses.KEY_RIGHT:
+                    pos +=1
+                elif key == curses.KEY_LEFT:
+                    pos -=1
+                elif key==27:
+                    break
+                elif key == 10:
+                    windo.clear()
+                    windo.refresh()
+                    windo.border(0)
+                    curses.noecho()
+                    windo.addstr(0,15,"Modulo de Jugadores")
+                    windo.addstr(15,15,"Se eligio al Jugador: "+usuario1)
+                    play=usuario1
+                    break
+                if pos<0:
+                    pos=1
+                if pos>listac.tam:
+                    pos=listac.tam
+            windo.refresh()
         wait_esc(window)
         window.clear()
         menu_principal(window)
